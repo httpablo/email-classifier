@@ -1,39 +1,56 @@
+import time
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from typing import Optional
-from dotenv import load_dotenv
 
-load_dotenv()
+from cors import setup_cors
+from model import AnalysisResponse
+from service import extract_text_from_pdf, preprocess_text
+from ai_agent import analyze_email
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"status": "Backend is running!"}
+setup_cors(app)
 
-@app.post("/analyze")
+
+@app.post(
+    "/analyze",
+    response_model=AnalysisResponse,
+    summary="Analisa e Classifica Emails",
+    description="Api recebe um texto ou arquivo PDF/TXT, aplica pré-processamento NLP e utiliza IA para classificar entre 'Produtivo' e 'Improdutivo'",
+)
 async def analyze_email_endpoint(
     text_input: Optional[str] = Form(None),
     file: Optional[UploadFile] = File(None)
 ):
+    start_time = time.time()
     content = ""
-    
+
     if text_input:
         content = text_input
     elif file:
         if file.filename.endswith(".pdf"):
-            pass
+            file_bytes = await file.read()
+            content = extract_text_from_pdf(file_bytes)
         elif file.filename.endswith(".txt"):
             content = (await file.read()).decode("utf-8")
         else:
-            raise HTTPException(status_code=400, detail="Formato não suportado")
-    
-    if not content:
-        raise HTTPException(status_code=400, detail="Nenhum conteúdo fornecido")
-    
-    
+            raise HTTPException(status_code=400, detail="Formato não suportado. Use PDF ou TXT.")
+
+    if not content.strip():
+        raise HTTPException(status_code=400, detail="Não foi possível extrair texto do arquivo.")
+
+    cleaned_content = preprocess_text(content)
+
+    ai_result = analyze_email(content)
+
+    end_time = time.time()
+    process_time = round(end_time - start_time, 2)
+
     return {
-        "original_text": content[:100] + "...",
-        "classification": "Produtivo",
-        "confidence": 0.95,
-        "suggested_response": "Prezado cliente, recebemos sua solicitação e..."
+        "original_text": content,
+        "cleaned_text": cleaned_content,
+        "classification": ai_result.get("classification"),
+        "confidence": ai_result.get("confidence"),
+        "suggested_response": ai_result.get("suggested_response"),
+        "process_time": f"{process_time}",
     }

@@ -11,22 +11,32 @@ OPENAI_MODEL_NAME = os.getenv("OPENAI_MODEL_NAME")
 
 def analyze_email(text: str):
     system_prompt = """
-    Você é uma IA assistente corporativa especializada em triagem de emails.
-    Sua tarefa é analisar o email recebido e retornar um JSON estritamente com a seguinte estrutura:
+    Você é uma IA assistente corporativa.
+    Sua tarefa é analisar o email recebido e retornar um JSON com a estrutura abaixo:
     {
         "classification": "Produtivo" ou "Improdutivo",
-        "confidence": <float entre 0 e 1 indicando certeza>,
-        "suggested_response": "<texto da resposta sugerida>"
+        "confidence": <float entre 0.0 e 1.0>,
+        "suggested_response": "<texto formatado do email>"
     }
 
     CATEGORIAS DE CLASSIFICAÇÃO:
-    - Produtivo: Emails que exigem ação, suporte, dúvidas técnicas, cobranças ou agendamentos.
-    - Improdutivo: Agradecimentos simples, felicitações (Natal, Aniversário), SPAM ou mensagens que não exigem resposta.
+    1. Produtivo: Solicitações de suporte, dúvidas, reclamações, orçamentos ou ações que exigem intervenção humana.
+    2. Improdutivo: Agradecimentos ("Obrigado"), Felicitações ("Feliz Natal"), SPAM ou mensagens meramente informativas sem necessidade de ação.
 
-    REGRAS DE RESPOSTA:
-    - Se Produtivo: Escreva uma resposta formal, empática e direta abordando o problema.
-    - Se Improdutivo: Escreva uma resposta curta e educada de agradecimento.
-    - O idioma da resposta deve ser Português (Brasil).
+    REGRAS DE RESPOSTA 'suggested_response':
+    - A resposta DEVE seguir estritamente o formato de email corporativo:
+      Assunto: [Assunto Sugerido]
+
+      [Saudação adequada],
+
+      [Corpo do email com parágrafos bem definidos]
+
+      Atenciosamente,
+
+    - Se 'Produtivo': Seja resolutivo, empático e profissional. Se faltarem dados, solicite-os polidamente. Use placeholders entre colchetes como [Nome do Cliente] ou [Data] se necessário.
+    - Se 'Improdutivo': Agradeça o contato de forma breve e educada, encerrando o ciclo de conversa com estrtura de email.
+    - Idioma: Português (Brasil).
+    - Evite alucinações: Não invente números de protocolo ou datas que não existam no texto original.
     """
 
     try:

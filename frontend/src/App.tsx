@@ -22,7 +22,7 @@ function App() {
         </main>
 
         <footer className="mt-12 text-center text-sm text-gray-400">
-          <p>Desenvolvido por @httpablo • {new Date().getFullYear()}</p>
+          <p>Desenvolvido por @httpablo • 2026</p>
         </footer>
       </div>
       <Toaster position="top-center" richColors />

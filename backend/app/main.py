@@ -1,15 +1,21 @@
 import time
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from typing import Optional
+from fastapi.middleware.cors import CORSMiddleware
 
-from cors import setup_cors
-from model import AnalysisResponse
-from service import extract_text_from_pdf, preprocess_text
-from ai_agent import analyze_email
+from .services.text import extract_text_from_pdf, preprocess_text
+from .schemas import AnalysisResponse
+from .services.ai import analyze_email
 
 app = FastAPI()
 
-setup_cors(app)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post(

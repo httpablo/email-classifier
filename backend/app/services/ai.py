@@ -3,7 +3,6 @@ import json
 from app.core.config import OPENAI_MODEL_NAME, client
 
 
-
 def analyze_email(text: str):
     system_prompt = """
     Você é uma IA assistente corporativa.

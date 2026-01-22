@@ -31,6 +31,18 @@ async def analyze_email_endpoint(
     text_input: Optional[str] = Form(None),
     file: Optional[UploadFile] = File(None)
 ):
+    """
+    Processamento do email: extrai texto (PDF/TXT), aplica limpeza NLP e consulta a IA.
+
+    Args:
+        text_input (Optional[str]): Texto inserido manualmente.
+        file (Optional[UploadFile]): Arquivo para upload (.pdf ou .txt).
+
+    Returns:
+        AnalysisResponse: JSON contendo a classificação ('Produtivo'/'Improdutivo'), 
+                        sugestão de resposta e tempo de processamento.
+    """
+
     start_time = time.time()
     content = ""
 

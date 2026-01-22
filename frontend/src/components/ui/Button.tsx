@@ -21,7 +21,7 @@ export function Button({
         ${
           disabled || isLoading
             ? "bg-gray-300 cursor-not-allowed"
-            : "bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg active:scale-95"
+            : "bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
         }
         ${className}
       `}

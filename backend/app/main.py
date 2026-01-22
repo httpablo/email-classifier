@@ -59,7 +59,6 @@ async def analyze_email_endpoint(
         "original_text": content,
         "cleaned_text": cleaned_content,
         "classification": ai_result.get("classification"),
-        "confidence": ai_result.get("confidence"),
         "suggested_response": ai_result.get("suggested_response"),
         "process_time": f"{process_time}",
     }

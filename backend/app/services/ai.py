@@ -5,32 +5,53 @@ from app.core.config import OPENAI_MODEL_NAME, client
 
 def analyze_email(text: str):
     system_prompt = """
-    Você é uma IA assistente corporativa.
-    Sua tarefa é analisar o email recebido e retornar um JSON com a estrutura abaixo:
+    Sua única tarefa é analisar o e-mail abaixo e retornar um JSON. Não adicione nenhum texto extra.
+
+    O formato de saída deve ser um JSON válido com a estrutura abaixo:
     {
         "classification": "Produtivo" ou "Improdutivo",
-        "confidence": <float entre 0.0 e 1.0>,
         "suggested_response": "<texto formatado do email>"
     }
 
-    CATEGORIAS DE CLASSIFICAÇÃO:
-    1. Produtivo: Solicitações de suporte, dúvidas, reclamações, orçamentos ou ações que exigem intervenção humana.
-    2. Improdutivo: Agradecimentos ("Obrigado"), Felicitações ("Feliz Natal"), SPAM ou mensagens meramente informativas sem necessidade de ação.
+    - "categoria": Classifique como "Produtivo" APENAS se o e-mail exigir uma ação concreta, resposta ou trabalho. Caso contrário, classifique como "Improdutivo". E-mails de agradecimento, felicitações, avisos ou SPAM são Improdutivos.
 
-    REGRAS DE RESPOSTA 'suggested_response':
-    - A resposta DEVE seguir estritamente o formato de email corporativo:
-      Assunto: [Assunto Sugerido]
+    -----------------------------------------------------------------------
+    Todas as sugestões de resposta DEVEM seguir estritamente este template:
+    Prezado(a),
 
-      [Saudação adequada],
+    [Corpo da resposta curto e contextual]
 
-      [Corpo do email com parágrafos bem definidos]
+    Atenciosamente,
+    [Seu Nome]
+    -----------------------------------------------------------------------
 
-      Atenciosamente,
+    - "sugestao_resposta": Sugira uma resposta curta, profissional e contextual.
+      - Para e-mails Produtivos, a resposta deve confirmar o recebimento e indicar o próximo passo.
+      - Para e-mails Improdutivos, a resposta deve ser adaptada ao conteúdo:
+        - Se for um agradecimento, responda com gentileza (ex: "Ficamos felizes em ajudar!").
+        - Se for uma felicitação (aniversário, festas), retribua os votos (ex: "Agradecemos e desejamos o mesmo a você!").
+        - Se for um aviso ou comunicado, apenas confirme o recebimento (ex: "Obrigado pelo aviso.").
+        - Se for um simples "ok" ou "recebido", a resposta pode ser "Confirmado, obrigado.".
 
-    - Se 'Produtivo': Seja resolutivo, empático e profissional. Se faltarem dados, solicite-os polidamente. Use placeholders entre colchetes como [Nome do Cliente] ou [Data] se necessário.
-    - Se 'Improdutivo': Agradeça o contato de forma breve e educada, encerrando o ciclo de conversa com estrtura de email.
-    - Idioma: Português (Brasil).
-    - Evite alucinações: Não invente números de protocolo ou datas que não existam no texto original.
+    A seguir, exemplos de como você deve se comportar.
+
+    **Exemplo 1 (Produtivo - Pedido de Suporte):**
+    {{
+      "classification": "Produtivo",
+      "suggested_response": "Olá. Recebemos sua solicitação e nossa equipe já está analisando o problema. Retornaremos assim que tivermos uma atualização."
+    }}
+
+    **Exemplo 2 (Improdutivo - Agradecimento):**
+    {{
+      "classification": "Improdutivo",
+      "suggested_response": "De nada! Ficamos felizes em ajudar. Tenha um ótimo dia."
+    }}
+
+    **Exemplo 3 (Improdutivo - Aviso):**
+    {{
+      "classification": "Improdutivo",
+      "suggested_response": "Ciente. Agradecemos pelo comunicado."
+    }}
     """
 
     try:
@@ -52,6 +73,5 @@ def analyze_email(text: str):
         print(f"Erro na OpenAI: {e}")
         return {
             "classification": "Erro",
-            "confidence": 0.0,
             "suggested_response": "Não foi possível processar este email no momento."
         }

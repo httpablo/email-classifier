@@ -38,23 +38,6 @@ export function AnalysisResult({ data, onReset }: AnalysisResultProps) {
               <span className="font-bold text-lg">{data.classification}</span>
             </div>
           </div>
-
-          <div className="text-right">
-            <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider">
-              Confiança da IA
-            </h3>
-            <div className="flex items-center justify-end mt-2 space-x-2">
-              <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className={`h-full ${isProductive ? "bg-green-500" : "bg-orange-500"}`}
-                  style={{ width: `${data.confidence * 100}%` }}
-                />
-              </div>
-              <span className="font-bold text-gray-700">
-                {(data.confidence * 100).toFixed(0)}%
-              </span>
-            </div>
-          </div>
         </div>
 
         <div className="space-y-2">
@@ -67,11 +50,9 @@ export function AnalysisResult({ data, onReset }: AnalysisResultProps) {
               <Copy className="w-3 h-3 mr-1" /> Copiar
             </button>
           </h3>
-          <textarea
-            readOnly
-            value={data.suggested_response}
-            className="w-full h-40 p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-700 focus:outline-none resize-none font-mono text-sm"
-          />
+          <div className="w-full min-h-40 p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-700 font-mono text-sm whitespace-pre-wrap leading-relaxed">
+            {data.suggested_response}
+          </div>
         </div>
 
         <div className="mt-6 pt-4 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">

@@ -18,7 +18,7 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
 
   const validateFile = (file: File) => {
     if (!["application/pdf", "text/plain"].includes(file.type))
-      return "Formato inválido. Use PDF ou TXT.";
+      return "Formato inválido. Use arquivo .pdf ou .txt.";
   };
 
   const handleFileSelect = (selectedFile: File) => {

@@ -25,7 +25,7 @@ app.add_middleware(
     "/analyze",
     response_model=AnalysisResponse,
     summary="Analisa e Classifica Emails",
-    description="Api recebe um texto ou arquivo PDF/TXT, aplica pré-processamento NLP e utiliza IA para classificar entre 'Produtivo' e 'Improdutivo'",
+    description="Api recebe um texto ou arquivo PDF/TXT, aplica pré-processamento NLP e utiliza IA para classificar entre 'Produtivo' ou 'Improdutivo'",
 )
 async def analyze_email_endpoint(
     text_input: Optional[str] = Form(None),
@@ -49,8 +49,7 @@ async def analyze_email_endpoint(
         raise HTTPException(status_code=400, detail="Não foi possível extrair texto do arquivo.")
 
     cleaned_content = preprocess_text(content)
-
-    ai_result = analyze_email(content)
+    ai_result = await analyze_email(cleaned_content)
 
     end_time = time.time()
     process_time = round(end_time - start_time, 2)

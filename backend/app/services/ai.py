@@ -3,7 +3,7 @@ import json
 from app.core.config import OPENAI_MODEL_NAME, client
 
 
-def analyze_email(text: str):
+async def analyze_email(text: str):
     system_prompt = """
     Sua única tarefa é analisar o e-mail abaixo e retornar um JSON. Não adicione nenhum texto extra.
 
@@ -55,7 +55,7 @@ def analyze_email(text: str):
     """
 
     try:
-        response = client.chat.completions.create(
+        response = await client.chat.completions.create(
             model=OPENAI_MODEL_NAME,
             messages=[
                 {"role": "system", "content": system_prompt},

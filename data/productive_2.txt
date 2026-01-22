@@ -1,0 +1,16 @@
+﻿Assunto: Erro ao gerar boleto no sistema
+
+
+Olá equipe de suporte,
+
+
+Estou tentando acessar a área do cliente para gerar a segunda via do meu boleto de cobrança, mas o sistema apresenta o erro "500 - Internal Server Error" toda vez que clico em "Imprimir".
+
+
+Preciso realizar o pagamento hoje para não pagar juros. Segue em anexo o print da tela de erro.
+
+
+Como devo proceder?
+
+
+Atenciosamente,

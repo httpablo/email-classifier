@@ -1,8 +1,3 @@
-export interface MetaInfo {
-  process_time: number;
-  model_used: string;
-}
-
 export interface AnalysisResponse {
   original_text: string;
   cleaned_text: string;

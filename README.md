@@ -42,16 +42,14 @@ A aplicação lê o conteúdo de emails (seja via texto direto ou upload de arqu
 
 ---
 
-## 🛠️ Decisões Técnicas e Tecnologias
-
-Para atender aos requisitos de **Qualidade Técnica** e **Uso de AI**, a arquitetura foi pensada para ser escalável e de fácil manutenção.
+## 🛠️ Tecnologias
 
 ### 🧠 Inteligência Artificial (Backend)
 
 Optou-se pelo uso da API da **OpenAI (modelo GPT-4o-mini)**.
 
-- **GPT-4o-mini:** Oferece uma latência extremamente baixa com uma capacidade de raciocínio superior para contextos nuances (sarcasmo, urgência) que modelos locais menores poderiam perder, além de não sobrecarregar a infraestrutura de deploy.
-- **Engenharia de Prompt:** O sistema utiliza prompts estruturados para garantir que a resposta saia sempre em formato JSON estrito, facilitando o parsing pelo Frontend.
+- **GPT-4o-mini:** Oferece uma latência baixa e não sobrecarregar a infraestrutura de deploy.
+- **Engenharia de Prompt:** O sistema utiliza prompts estruturados para garantir que a resposta saia sempre em formato JSON, facilitando o parsing pelo Frontend.
 
 ### 💻 Interface (Frontend)
 
@@ -78,7 +76,7 @@ A aplicação foi totalmente containerizada utilizando Docker e Docker Compose.
 1.  **Clone o repositório:**
 
     ```bash
-    git clone [https://github.com/SEU-USUARIO/email-classifier.git](https://github.com/SEU-USUARIO/email-classifier.git)
+    git clone [https://github.com/httpablo/email-classifier.git](https://github.com/httpablo/email-classifier.git)
     cd email-classifier
     ```
 
@@ -87,7 +85,7 @@ A aplicação foi totalmente containerizada utilizando Docker e Docker Compose.
 
     ```env
     OPENAI_API_KEY=sua-chave-aqui-sk-...
-    OPENAI_MODEL_NAME=gpt-4o-mini
+    OPENAI_MODEL_NAME=seu-modelo
     ```
 
 3.  **Inicie a Aplicação:**
